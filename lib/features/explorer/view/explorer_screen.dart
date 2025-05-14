@@ -49,6 +49,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
           sliver: SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,7 +73,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                       return Center(child: CircularProgressIndicator());
                     } else if (state is CategoryLoaded) {
                       return SizedBox(
-                        height: 128,
+                        height: 72,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {

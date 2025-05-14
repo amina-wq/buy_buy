@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/features/explorer/bloc/category/category_bloc.dart';
-import 'package:buy_buy/models/category/category.dart';
+import 'package:buy_buy/features/explorer/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,14 +41,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverList.separated(
-                    itemBuilder: (context, index) {
-                      Category category = state.categories[index];
-                      return ListTile(
-                        leading: Icon(category.iconData),
-                        title: Text(category.name),
-                        onTap: () => context.maybePop<Category>(category),
-                      );
-                    },
+                    itemBuilder: (context, index) => CategoryTile(category: state.categories[index]),
                     separatorBuilder: (context, index) => const Divider(height: 1),
                     itemCount: state.categories.length,
                   ),

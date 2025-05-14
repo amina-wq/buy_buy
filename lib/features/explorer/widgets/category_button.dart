@@ -20,7 +20,10 @@ class _CategoryButtonState extends State<CategoryButton> {
     return Column(
       children: [
         Container(
-          decoration: ShapeDecoration(shape: CircleBorder(), color: widget.isSelected ? theme.hintColor : theme.indicatorColor),
+          decoration: ShapeDecoration(
+            shape: CircleBorder(),
+            color: widget.isSelected ? theme.hintColor : theme.indicatorColor,
+          ),
           child: IconButton(
             onPressed: widget.onTap,
             icon: Icon(
