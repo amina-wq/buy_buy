@@ -56,13 +56,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                   children: [
                     Text('Select Category', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
                     TextButton(
-                      onPressed: () async {
-                        final categoryBloc = context.read<CategoryBloc>();
-                        var category = await context.pushRoute<Category>(CategoriesRoute());
-                        if (category != null) {
-                          categoryBloc.add(SwitchCategoryEvent(category: category));
-                        }
-                      },
+                      onPressed: () => _onViewAllPressed(context),
                       child: Text('view all', style: TextStyle(color: theme.hintColor)),
                     ),
                   ],
@@ -77,10 +71,11 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
+                            Category category = state.categories[index];
                             return CategoryButton(
-                              onTap: () => _onSwitchCategory(context, state.categories, index),
-                              category: state.categories[index],
-                              isSelected: state.categories[index] == state.category,
+                              onTap: () => _onSwitchCategory(context, category),
+                              category: category,
+                              isSelected: category == state.category,
                             );
                           },
                           separatorBuilder: (context, index) => SizedBox(width: 16),
@@ -100,7 +95,15 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
     );
   }
 
-  void _onSwitchCategory(BuildContext context, List categories, int index) {
-    context.read<CategoryBloc>().add(SwitchCategoryEvent(category: categories[index]));
+  Future<void> _onViewAllPressed(BuildContext context) async {
+    final categoryBloc = context.read<CategoryBloc>();
+    var category = await context.pushRoute<Category>(CategoriesRoute());
+    if (category != null) {
+      categoryBloc.add(SwitchCategoryEvent(category: category));
+    }
+  }
+
+  void _onSwitchCategory(BuildContext context, Category category) {
+    context.read<CategoryBloc>().add(SwitchCategoryEvent(category: category));
   }
 }

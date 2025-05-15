@@ -14,12 +14,6 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
-  void initState() {
-    super.initState();
-    context.read<CategoryBloc>().add(CategoryLoadEvent());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<CategoryBloc, CategoryState>(

@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return AutoTabsRouter(
       routes: const [
-        ExplorerRoute(),
+        ExplorerRouterRoute(),
         CartRoute(),
         FavoritesRoute(),
         ProfileRoute(),
