@@ -15,6 +15,8 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
@@ -26,7 +28,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 centerTitle: true,
                 title: Text(
                   'Select Category',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
               if (state is CategoryLoading) ...[

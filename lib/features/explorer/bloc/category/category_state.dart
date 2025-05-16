@@ -12,16 +12,13 @@ final class CategoryInitial extends CategoryState {}
 final class CategoryLoading extends CategoryState {}
 
 final class CategoryLoaded extends CategoryState {
-  CategoryLoaded({
-    required this.categories,
-    Category? selectedCategory,
-  }) : category = selectedCategory ?? categories.first;
+  const CategoryLoaded({required this.categories, required this.selectedCategory});
 
   final List<Category> categories;
-  final Category? category;
+  final Category selectedCategory;
 
   @override
-  List<Object> get props => super.props..add([categories, category]);
+  List<Object> get props => super.props..add([categories, selectedCategory]);
 }
 
 final class CategoryFailure extends CategoryState {

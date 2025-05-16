@@ -1,63 +1,26 @@
 import 'package:flutter/material.dart';
 
-
 final _primaryColor = Color(0xff001a6e);
 var _textTheme = TextTheme(
-  displayLarge: TextStyle(
-    color: _primaryColor,
-  ),
-  displayMedium: TextStyle(
-    color: _primaryColor,
-  ),
-  displaySmall: TextStyle(
-    color: _primaryColor,
-  ),
-  headlineLarge: TextStyle(
-    color: _primaryColor,
-  ),
-  headlineMedium: TextStyle(
-    color: _primaryColor,
-  ),
-  titleLarge: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  titleMedium: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  titleSmall: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  labelLarge: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  labelMedium: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  labelSmall: TextStyle(
-    color: _primaryColor,
-    fontWeight: FontWeight.w600,
-  ),
-  bodyLarge: TextStyle(
-    color: _primaryColor,
-  ),
-  bodyMedium: TextStyle(
-    color: _primaryColor,
-  ),
-  bodySmall: TextStyle(
-    color: _primaryColor,
-  ),
+  displayLarge: TextStyle(color: _primaryColor),
+  displayMedium: TextStyle(color: _primaryColor),
+  displaySmall: TextStyle(color: _primaryColor),
+  headlineLarge: TextStyle(color: _primaryColor),
+  headlineMedium: TextStyle(color: _primaryColor),
+  titleLarge: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  titleMedium: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  titleSmall: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  labelLarge: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  labelMedium: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  labelSmall: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600),
+  bodyLarge: TextStyle(color: _primaryColor),
+  bodyMedium: TextStyle(color: _primaryColor),
+  bodySmall: TextStyle(color: _primaryColor),
 );
 
 final _listTileTheme = ListTileThemeData(
   textColor: _primaryColor,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8),
-  ),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
 );
 
 final themeData = ThemeData(

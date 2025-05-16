@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/features/cart/cart.dart';
 import 'package:buy_buy/features/explorer/explorer.dart';
-import 'package:buy_buy/features/explorer/view/explorer_router.dart';
-import 'package:buy_buy/features/profile/profile.dart';
 import 'package:buy_buy/features/favorites/favorites.dart';
 import 'package:buy_buy/features/home/home.dart';
+import 'package:buy_buy/features/profile/profile.dart';
 
 part 'router.gr.dart';
 

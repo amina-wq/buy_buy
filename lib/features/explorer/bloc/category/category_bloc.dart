@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:buy_buy/models/models.dart';
 import 'package:buy_buy/repositories/category/category_repository_interface.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'category_event.dart';
-
 part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
@@ -12,7 +13,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     : _categoryRepository = categoryRepository,
       super(CategoryInitial()) {
     on<CategoryLoadEvent>(_onLoad);
-    on<SwitchCategoryEvent>(_onSwitch);
+    on<CategorySwitchEvent>(_onSwitch);
   }
 
   final CategoryRepositoryInterface _categoryRepository;
@@ -21,20 +22,19 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     emit(CategoryLoading());
     try {
       final categories = await _categoryRepository.getAllCategories();
-      emit(CategoryLoaded(categories: categories));
+      emit(CategoryLoaded(categories: categories, selectedCategory: event.selectedCategory));
     } catch (e) {
       emit(CategoryFailure(error: e));
+    } finally {
+      event.completer?.complete();
     }
   }
 
-  _onSwitch(SwitchCategoryEvent event, Emitter<CategoryState> emit) {
+  _onSwitch(CategorySwitchEvent event, Emitter<CategoryState> emit) async {
     if (state is CategoryLoaded) {
-      emit(
-        CategoryLoaded(
-          categories: (state as CategoryLoaded).categories,
-          selectedCategory: event.category,
-        ),
-      );
+      final currentState = state as CategoryLoaded;
+      emit(CategoryLoaded(categories: currentState.categories, selectedCategory: event.category));
     }
+    event.completer?.complete();
   }
 }

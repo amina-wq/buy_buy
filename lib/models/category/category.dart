@@ -30,8 +30,9 @@ class Category {
 
   Category({required this.id, required this.name, required this.iconData});
 
-  factory Category.fromJson(Map<String, dynamic> json) =>
-      _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
 }
+
+final allCategory = Category(id: '_all', name: 'All', iconData: Icons.widgets_outlined);

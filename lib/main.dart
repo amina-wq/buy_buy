@@ -1,3 +1,4 @@
+import 'package:buy_buy/bloc/product/product_bloc.dart';
 import 'package:buy_buy/features/explorer/bloc/category/category_bloc.dart';
 import 'package:buy_buy/repositories/repositories.dart';
 import 'package:buy_buy/router/router.dart';
@@ -29,9 +30,15 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<CategoryRepositoryInterface>(create: (context) => CategoryRepository()),
+        RepositoryProvider<ProductRepositoryInterface>(create: (context) => ProductRepository()),
       ],
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => CategoryBloc(categoryRepository: context.read<CategoryRepositoryInterface>()))],
+        providers: [
+          BlocProvider(
+            create: (context) => CategoryBloc(categoryRepository: context.read<CategoryRepositoryInterface>()),
+          ),
+          BlocProvider(create: (context) => ProductBloc(productRepository: context.read<ProductRepositoryInterface>())),
+        ],
         child: MaterialApp.router(
           theme: themeData,
           debugShowCheckedModeBanner: false,
