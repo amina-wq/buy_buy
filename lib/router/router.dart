@@ -1,9 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:buy_buy/features/cart/cart.dart';
-import 'package:buy_buy/features/explorer/explorer.dart';
-import 'package:buy_buy/features/favorites/favorites.dart';
-import 'package:buy_buy/features/home/home.dart';
-import 'package:buy_buy/features/profile/profile.dart';
+import 'package:buy_buy/features/features.dart';
 
 part 'router.gr.dart';
 
@@ -28,5 +24,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: ProfileRoute.page),
       ],
     ),
+    AutoRoute(page: AuthRoute.page, path: '/auth'),
   ];
 }

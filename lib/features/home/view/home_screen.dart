@@ -1,10 +1,23 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:buy_buy/features/auth/bloc/auth_bloc.dart';
 import 'package:buy_buy/router/router.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read<AuthBloc>().add(AuthCheckEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             selectedItemColor: theme.hintColor,
             unselectedItemColor: theme.scaffoldBackgroundColor,
             currentIndex: tabsRouter.activeIndex,
-            onTap: (index) => _openPage(index, tabsRouter),
+            onTap: (index) => _openPage(context, index, tabsRouter),
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.search_outlined),
@@ -48,7 +61,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _openPage(int index, TabsRouter tabsRouter) {
+  void _openPage(BuildContext context, int index, TabsRouter tabsRouter) {
+    const protectedRoutes = [1, 2, 3];
+
+    final authBloc = context.read<AuthBloc>();
+    final isAuthenticated = authBloc.state is Authorized;
+
+    if (protectedRoutes.contains(index) && !isAuthenticated) {
+      context.router.push(const AuthRoute());
+      return;
+    }
+
     tabsRouter.setActiveIndex(index);
   }
 }

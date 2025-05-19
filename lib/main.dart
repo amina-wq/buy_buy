@@ -1,5 +1,5 @@
 import 'package:buy_buy/bloc/product/product_bloc.dart';
-import 'package:buy_buy/features/explorer/bloc/category/category_bloc.dart';
+import 'package:buy_buy/features/features.dart';
 import 'package:buy_buy/repositories/repositories.dart';
 import 'package:buy_buy/router/router.dart';
 import 'package:buy_buy/ui/ui.dart';
@@ -29,11 +29,16 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
+        RepositoryProvider<UserRepositoryInterface>(create: (context) => UserRepository()),
         RepositoryProvider<CategoryRepositoryInterface>(create: (context) => CategoryRepository()),
         RepositoryProvider<ProductRepositoryInterface>(create: (context) => ProductRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create:
+                (context) => AuthBloc(userRepository: context.read<UserRepositoryInterface>()),
+          ),
           BlocProvider(
             create: (context) => CategoryBloc(categoryRepository: context.read<CategoryRepositoryInterface>()),
           ),

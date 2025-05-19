@@ -23,13 +23,19 @@ final _listTileTheme = ListTileThemeData(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
 );
 
+final _appBarTheme = AppBarTheme(
+  titleTextStyle: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600, fontSize: 24),
+);
+
 final themeData = ThemeData(
   useMaterial3: true,
   primaryColor: _primaryColor,
   colorScheme: ColorScheme.fromSeed(seedColor: _primaryColor),
   highlightColor: Color(0xffe1ffbb),
   hintColor: Color(0xff009990),
+  disabledColor: Color(0xff2e57de),
   fontFamily: 'MarkPro',
   textTheme: _textTheme,
+  appBarTheme: _appBarTheme,
   listTileTheme: _listTileTheme,
 );
