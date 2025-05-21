@@ -12,9 +12,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
   email: json['email'] as String,
   phone: json['phone'] as String,
   gender: $enumDecode(_$GenderEnumMap, json['gender']),
-  dateOfBirth: const TimestampConverter().fromJson(
-    json['dateOfBirth'] as Timestamp,
-  ),
+  dateOfBirth: const TimestampConverter().fromJson(json['dateOfBirth'] as Timestamp),
   avatarUrl: json['avatar'] as String,
 );
 
@@ -28,9 +26,4 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
   'avatar': instance.avatarUrl,
 };
 
-const _$GenderEnumMap = {
-  Gender.male: 'male',
-  Gender.female: 'female',
-  Gender.unknown: '',
-  Gender.other: 'other',
-};
+const _$GenderEnumMap = {Gender.male: 'male', Gender.female: 'female', Gender.unknown: '', Gender.other: 'other'};

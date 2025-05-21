@@ -21,13 +21,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverAppBar(
-          snap: true,
-          pinned: true,
-          floating: true,
-          centerTitle: true,
-          title: const Text('Favorites'),
-        ),
+        SliverAppBar(snap: true, pinned: true, floating: true, centerTitle: true, title: const Text('Favorites')),
         SliverPadding(
           padding: EdgeInsets.all(16),
           sliver: BlocBuilder<FavoritesBloc, FavoritesState>(
@@ -78,5 +72,4 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
     productBloc.add(ProductLoadEvent());
   }
-
 }

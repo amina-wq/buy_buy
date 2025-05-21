@@ -22,11 +22,7 @@ class _CategoryButtonState extends State<CategoryButton> {
         Container(
           decoration: ShapeDecoration(
             shadows: [
-              BoxShadow(
-                color: theme.primaryColor.withValues(alpha: 0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
+              BoxShadow(color: theme.primaryColor.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 2)),
             ],
             shape: CircleBorder(),
             color: widget.isSelected ? theme.hintColor : theme.indicatorColor,

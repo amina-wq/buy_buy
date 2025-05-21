@@ -33,14 +33,16 @@ class ProfileCard extends StatelessWidget {
           nameBuilder != null ? nameBuilder!(context) : Text(profile.name, style: theme.textTheme.titleLarge),
           Text(profile.email, style: theme.textTheme.bodyLarge?.copyWith(color: theme.hintColor)),
           SizedBox(height: 8),
-          genderBuilder != null ? genderBuilder!(context) : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              profile.gender.icon,
-              const SizedBox(width: 4),
-              Text(profile.gender.description, style: theme.textTheme.bodyLarge),
-            ],
-          ),
+          genderBuilder != null
+              ? genderBuilder!(context)
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  profile.gender.icon,
+                  const SizedBox(width: 4),
+                  Text(profile.gender.description, style: theme.textTheme.bodyLarge),
+                ],
+              ),
         ],
       ),
     );

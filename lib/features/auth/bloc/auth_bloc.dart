@@ -1,15 +1,13 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buy_buy/models/models.dart';
-import 'package:equatable/equatable.dart';
 import 'package:buy_buy/repositories/user/user_repository_interface.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({required UserRepositoryInterface userRepository})
-      : _userRepository = userRepository,
-      super(AuthInitial()) {
+  AuthBloc({required UserRepositoryInterface userRepository}) : _userRepository = userRepository, super(AuthInitial()) {
     on<AuthCheckEvent>(_onAuthCheckEvent);
     on<AuthSignInEvent>(_onSignIn);
     on<AuthSignUpEvent>(_onSignUp);
@@ -74,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onUpdateProfile(ProfileUpdateEvent event, Emitter<AuthState> emit) async {
     emit(ProfileUpdating());
     try {
-      final profile = await _userRepository.updateProfile( event.updatedProfile);
+      final profile = await _userRepository.updateProfile(event.updatedProfile);
       if (profile == null) {
         throw Exception('Updating profile unknown error');
       }
@@ -84,5 +82,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state);
     }
   }
-
 }
