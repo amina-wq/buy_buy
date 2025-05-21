@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/bloc/bloc.dart';
 import 'package:buy_buy/features/explorer/explorer.dart';
+import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:buy_buy/router/router.dart';
 import 'package:buy_buy/ui/ui.dart';
@@ -140,7 +141,12 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    return ProductCard(product: product, onTap: () => {}, onToggleFavorite: () => {});
+                    return ProductCard(
+                      isFavorite: state.favoriteIds.contains(product.id),
+                      product: product,
+                      onTap: () => {},
+                      onToggleFavorite: () => _onToggleFavorite(product),
+                    );
                   },
                   itemCount: products.length,
                 );
@@ -210,5 +216,15 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
       final ProductBloc productBloc = context.read<ProductBloc>();
       productBloc.add(ProductLoadEvent(categoryId: category.id));
     }
+  }
+
+  _onToggleFavorite(Product product) async {
+    final FavoritesBloc favoritesBloc = context.read<FavoritesBloc>();
+    final ProductBloc productBloc = context.read<ProductBloc>();
+
+    final completer = Completer();
+    productBloc.add(ToggleFavoriteProductEvent(productId: product.id, completer: completer));
+    await completer.future;
+    favoritesBloc.add(FavoritesLoadEvent());
   }
 }

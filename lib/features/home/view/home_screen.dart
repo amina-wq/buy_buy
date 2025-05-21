@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buy_buy/features/auth/bloc/auth_bloc.dart';
+import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
 import 'package:buy_buy/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<AuthBloc>().add(AuthCheckEvent());
+    context.read<FavoritesBloc>().add(FavoritesLoadEvent());
     super.initState();
   }
 

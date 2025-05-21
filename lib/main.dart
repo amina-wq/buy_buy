@@ -1,4 +1,5 @@
 import 'package:buy_buy/bloc/product/product_bloc.dart';
+import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
 import 'package:buy_buy/features/features.dart';
 import 'package:buy_buy/repositories/repositories.dart';
 import 'package:buy_buy/router/router.dart';
@@ -32,17 +33,28 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
         RepositoryProvider<UserRepositoryInterface>(create: (context) => UserRepository()),
         RepositoryProvider<CategoryRepositoryInterface>(create: (context) => CategoryRepository()),
         RepositoryProvider<ProductRepositoryInterface>(create: (context) => ProductRepository()),
+        RepositoryProvider<FavoriteRepositoryInterface>(create: (context) => FavoriteRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create:
-                (context) => AuthBloc(userRepository: context.read<UserRepositoryInterface>()),
-          ),
+          BlocProvider(create: (context) => AuthBloc(userRepository: context.read<UserRepositoryInterface>())),
           BlocProvider(
             create: (context) => CategoryBloc(categoryRepository: context.read<CategoryRepositoryInterface>()),
           ),
-          BlocProvider(create: (context) => ProductBloc(productRepository: context.read<ProductRepositoryInterface>())),
+          BlocProvider(
+            create:
+                (context) => ProductBloc(
+                  productRepository: context.read<ProductRepositoryInterface>(),
+                  favoriteRepository: context.read<FavoriteRepositoryInterface>(),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => FavoritesBloc(
+                  favoriteRepository: context.read<FavoriteRepositoryInterface>(),
+                  productRepository: context.read<ProductRepositoryInterface>(),
+                ),
+          ),
         ],
         child: MaterialApp.router(
           theme: themeData,

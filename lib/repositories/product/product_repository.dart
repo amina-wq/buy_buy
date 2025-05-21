@@ -6,9 +6,9 @@ class ProductRepository implements ProductRepositoryInterface {
   final CollectionReference _products = FirebaseFirestore.instance.collection('products');
 
   @override
-  Future<List<Product>> getProducts(String? categoryId) async {
+  Future<List<Product>> getProducts({String? categoryId}) async {
     try {
-      if (categoryId != allCategory.id) {
+      if (categoryId != null && categoryId != allCategory.id) {
         final snapshot = await _products.where('categoryId', isEqualTo: categoryId).get();
         return snapshot.docs.map((doc) {
           final data = doc.data() as Map<String, dynamic>;

@@ -15,3 +15,13 @@ final class ProductLoadEvent extends ProductEvent {
   @override
   List<Object?> get props => super.props..add(categoryId);
 }
+
+final class ToggleFavoriteProductEvent extends ProductEvent {
+  const ToggleFavoriteProductEvent({required this.productId, this.completer});
+
+  final String productId;
+  final Completer? completer;
+
+  @override
+  List<Object?> get props => super.props..addAll([productId, completer]);
+}
