@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class UserRepository implements UserRepositoryInterface {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
 
   @override
   Future<void> logout() async {
@@ -22,7 +22,7 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     try {
-      DocumentSnapshot userDoc = await users.doc(user.uid).get();
+      DocumentSnapshot userDoc = await _users.doc(user.uid).get();
       Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
       return Profile.fromJson({...data, 'documentID': user.uid, 'email': user.email});
     } catch (e) {
@@ -54,7 +54,7 @@ class UserRepository implements UserRepositoryInterface {
     jsonProfile.remove('documentID');
 
     try {
-      await users.doc(user.uid).set(jsonProfile);
+      await _users.doc(user.uid).set(jsonProfile);
       return profile;
     } catch (e) {
       return null;
@@ -67,7 +67,7 @@ class UserRepository implements UserRepositoryInterface {
     if (user == null) return null;
 
     try {
-      DocumentSnapshot userDoc = await users.doc(user.uid).get();
+      DocumentSnapshot userDoc = await _users.doc(user.uid).get();
       Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
       return Profile.fromJson({...data, 'documentID': user.uid, 'email': user.email});
     } catch (e) {
@@ -86,7 +86,7 @@ class UserRepository implements UserRepositoryInterface {
             ..remove('documentID')
             ..remove('email');
 
-      await users.doc(user.uid).update(updatedData);
+      await _users.doc(user.uid).update(updatedData);
 
       return updatedProfile.copyWith(email: user.email);
     } catch (e) {
