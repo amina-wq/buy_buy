@@ -62,9 +62,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 surfaceTintColor: Colors.transparent,
                 title: const Text("Profile"),
                 actions: [
-                  if (isEditing)
-                    IconButton(onPressed: _onSave, icon: Icon(Icons.save_outlined, color: theme.primaryColor))
-                  else
+                  if (isEditing) ...[
+                    IconButton(onPressed: _onSave, icon: Icon(Icons.save_outlined, color: theme.primaryColor)),
+                    IconButton(onPressed: _onToggleEdit, icon: Icon(Icons.close_outlined, color: theme.primaryColor)),
+                  ] else
                     IconButton(onPressed: _onToggleEdit, icon: Icon(Icons.edit_outlined, color: theme.primaryColor)),
                 ],
               ),
@@ -127,8 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         } else if (state is ProfileUpdating) {
           return const Center(child: CircularProgressIndicator());
-        }
-        else {
+        } else {
           return const Center(child: Text("Please log in to view your profile."));
         }
       },
@@ -163,16 +163,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _genderBuilder(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DropdownButton<Gender>(
       value: _gender,
       onChanged: (g) => setState(() => _gender = g!),
       icon: const Icon(Icons.arrow_drop_down),
+      isDense: true,
+      underline: const SizedBox(),
       items:
           Gender.values
               .map(
-                (g) => DropdownMenuItem(
-                  value: g,
-                  child: Row(children: [g.icon, const SizedBox(width: 8), Text(g.description)]),
+                (gender) => DropdownMenuItem(
+                  value: gender,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 8,
+                    children: [gender.icon, Text(gender.description, style: theme.textTheme.bodyLarge)],
+                  ),
                 ),
               )
               .toList(),
