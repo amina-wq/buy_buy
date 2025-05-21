@@ -8,10 +8,11 @@ sealed class SearchEvent extends Equatable {
 }
 
 final class SearchQueryChanged extends SearchEvent {
-  const SearchQueryChanged({required this.query});
+  const SearchQueryChanged({required this.category, required this.query});
 
+  final Category category;
   final String query;
 
   @override
-  List<Object> get props => super.props..add(query);
+  List<Object> get props => super.props..addAll([category, query]);
 }

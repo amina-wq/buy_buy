@@ -8,12 +8,13 @@ sealed class ProductEvent extends Equatable {
 }
 
 final class ProductLoadEvent extends ProductEvent {
-  const ProductLoadEvent({this.categoryId});
+  const ProductLoadEvent({this.categoryId, this.query});
 
   final String? categoryId;
+  final String? query;
 
   @override
-  List<Object?> get props => super.props..add(categoryId);
+  List<Object?> get props => super.props..addAll([categoryId, query]);
 }
 
 final class ToggleFavoriteProductEvent extends ProductEvent {

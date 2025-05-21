@@ -176,7 +176,10 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
 
   Future<void> _showSearchBottomSheet() async {
     final ProductBloc productBloc = context.read<ProductBloc>();
-    final products = productBloc.state is ProductLoaded ? (productBloc.state as ProductLoaded).products : <Product>[];
+    final CategoryBloc categoryBloc = context.read<CategoryBloc>();
+
+    final selectedCategory =
+        categoryBloc.state is CategoryLoaded ? (categoryBloc.state as CategoryLoaded).selectedCategory : allCategory;
 
     final query = await showModalBottomSheet<String>(
       isScrollControlled: true,
@@ -186,10 +189,15 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.only(top: 90),
-          child: SearchProductsBottomSheet(controller: _searchController, products: products),
+          child: SearchProductsBottomSheet(controller: _searchController, category: selectedCategory),
         );
       },
     );
+
+    if (query != null) {
+      _searchController.text = query;
+      productBloc.add(ProductLoadEvent(categoryId: selectedCategory.id, query: query));
+    }
   }
 
   Future<void> _onViewAllPressed() async {

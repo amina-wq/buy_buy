@@ -1,21 +1,26 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/features/explorer/bloc/search/search_bloc.dart';
 import 'package:buy_buy/features/explorer/widgets/product_list_tile.dart';
 import 'package:buy_buy/models/models.dart';
+import 'package:buy_buy/repositories/product/product_repository_interface.dart';
 import 'package:buy_buy/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchProductsBottomSheet extends StatelessWidget {
-  const SearchProductsBottomSheet({super.key, required this.controller, required this.products});
+  const SearchProductsBottomSheet({super.key, required this.controller, required this.category});
 
   final TextEditingController controller;
-  final List<Product> products;
+  final Category category;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocProvider(
-      create: (context) => SearchBloc(products: products)..add(SearchQueryChanged(query: controller.text)),
+      create:
+          (context) =>
+              SearchBloc(productRepository: context.read<ProductRepositoryInterface>())
+                ..add(SearchQueryChanged(category: category, query: controller.text)),
       child: Builder(
         builder: (context) {
           return BaseBottomSheet(
@@ -33,7 +38,7 @@ class SearchProductsBottomSheet extends StatelessWidget {
                           ),
                           child: TextField(
                             onChanged: (value) {
-                              context.read<SearchBloc>().add(SearchQueryChanged(query: value));
+                              context.read<SearchBloc>().add(SearchQueryChanged(category: category, query: value));
                             },
                             controller: controller,
                             decoration: InputDecoration(
@@ -70,7 +75,7 @@ class SearchProductsBottomSheet extends StatelessWidget {
                           itemCount: state.filteredProducts.length,
                           itemBuilder: (context, index) {
                             final product = state.filteredProducts[index];
-                            return ProductListTile(product: product, onTap: () => _onProductTap(product));
+                            return ProductListTile(product: product, onTap: () => _onProductTap(context, product));
                           },
                         );
                       } else if (state is SearchFailure) {
@@ -90,10 +95,10 @@ class SearchProductsBottomSheet extends StatelessWidget {
   }
 
   void _onTapSearch(BuildContext context) {
-    Navigator.of(context).pop(controller.text);
+    context.maybePop(controller.text);
   }
 
-  void _onProductTap(Product product) {
-    // Handle product tap
+  void _onProductTap(BuildContext context, Product product) {
+    context.maybePop(product.name);
   }
 }

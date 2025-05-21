@@ -1,5 +1,3 @@
-
-
 abstract interface class FavoriteRepositoryInterface {
   Future<List<String>> getFavoriteIds();
 

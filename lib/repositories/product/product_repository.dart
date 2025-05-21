@@ -6,21 +6,28 @@ class ProductRepository implements ProductRepositoryInterface {
   final CollectionReference _products = FirebaseFirestore.instance.collection('products');
 
   @override
-  Future<List<Product>> getProducts({String? categoryId}) async {
+  Future<List<Product>> getProducts({String? categoryId, String? query}) async {
     try {
+      Query queryRef = _products;
+
       if (categoryId != null && categoryId != allCategory.id) {
-        final snapshot = await _products.where('categoryId', isEqualTo: categoryId).get();
-        return snapshot.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          return Product.fromJson({...data, 'documentID': doc.id});
-        }).toList();
-      } else {
-        final snapshot = await _products.get();
-        return snapshot.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          return Product.fromJson({...data, 'documentID': doc.id});
-        }).toList();
+        queryRef = queryRef.where('categoryId', isEqualTo: categoryId);
       }
+
+      final snapshot = await queryRef.get();
+
+      final products =
+          snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return Product.fromJson({...data, 'documentID': doc.id});
+          }).toList();
+
+      if (query != null && query.isNotEmpty) {
+        final lowerQuery = query.toLowerCase();
+        return products.where((product) => product.name.toLowerCase().contains(lowerQuery)).toList();
+      }
+
+      return products;
     } catch (e) {
       return [];
     }
