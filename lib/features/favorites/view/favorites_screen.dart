@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/bloc/product/product_bloc.dart';
 import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
+import 'package:buy_buy/features/explorer/bloc/category/category_bloc.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:buy_buy/ui/ui.dart';
 import 'package:flutter/material.dart';
@@ -65,11 +66,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   void _onRemoveFavorite(Product product) async {
     final favoritesBloc = context.read<FavoritesBloc>();
     final productBloc = context.read<ProductBloc>();
+    final categoryBloc = context.read<CategoryBloc>();
+
+    final selectedCategory =
+        categoryBloc.state is CategoryLoaded ? (categoryBloc.state as CategoryLoaded).selectedCategory : allCategory;
 
     final completer = Completer();
     favoritesBloc.add(RemoveFavoriteEvent(product: product, completer: completer));
     await completer.future;
 
-    productBloc.add(ProductLoadEvent());
+    productBloc.add(ProductLoadEvent(categoryId: selectedCategory.id));
   }
 }
