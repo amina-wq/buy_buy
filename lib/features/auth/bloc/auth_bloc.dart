@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSignInEvent>(_onSignIn);
     on<AuthSignUpEvent>(_onSignUp);
     on<AuthLogOutEvent>(_onLogout);
+    on<ProfileUpdateEvent>(_onUpdateProfile);
   }
 
   final UserRepositoryInterface _userRepository;
@@ -67,6 +68,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Unauthorized());
     } catch (e) {
       emit(Unauthorized(error: e));
+    }
+  }
+
+  void _onUpdateProfile(ProfileUpdateEvent event, Emitter<AuthState> emit) async {
+    emit(ProfileUpdating());
+    try {
+      final profile = await _userRepository.updateProfile( event.updatedProfile);
+      if (profile == null) {
+        throw Exception('Updating profile unknown error');
+      }
+      emit(Authorized(profile: profile));
+    } catch (e) {
+      emit(ProfileUpdateError(error: e));
+      emit(state);
     }
   }
 

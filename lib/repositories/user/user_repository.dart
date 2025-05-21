@@ -59,7 +59,6 @@ class UserRepository implements UserRepositoryInterface {
     } catch (e) {
       return null;
     }
-
   }
 
   @override
@@ -71,6 +70,25 @@ class UserRepository implements UserRepositoryInterface {
       DocumentSnapshot userDoc = await users.doc(user.uid).get();
       Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
       return Profile.fromJson({...data, 'documentID': user.uid, 'email': user.email});
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<Profile?> updateProfile(Profile updatedProfile) async {
+    User? user = _firebaseAuth.currentUser;
+    if (user == null || user.email != updatedProfile.email) return null;
+
+    try {
+      final updatedData =
+          updatedProfile.toJson()
+            ..remove('documentID')
+            ..remove('email');
+
+      await users.doc(user.uid).update(updatedData);
+
+      return updatedProfile.copyWith(email: user.email);
     } catch (e) {
       return null;
     }

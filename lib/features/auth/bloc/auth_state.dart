@@ -29,3 +29,14 @@ final class Unauthorized extends AuthState {
   @override
   List<Object?> get props => super.props..add(error);
 }
+
+final class ProfileUpdating extends AuthState {}
+
+final class ProfileUpdateError extends AuthState {
+  const ProfileUpdateError({this.error});
+
+  final Object? error;
+
+  @override
+  List<Object?> get props => super.props..add(error);
+}

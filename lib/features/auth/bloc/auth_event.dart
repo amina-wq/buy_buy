@@ -31,3 +31,9 @@ final class AuthSignUpEvent extends AuthEvent {
   @override
   List<Object?> get props => super.props..addAll([email, password, phone]);
 }
+
+final class ProfileUpdateEvent extends AuthEvent {
+  const ProfileUpdateEvent({required this.updatedProfile});
+
+  final Profile updatedProfile;
+}
