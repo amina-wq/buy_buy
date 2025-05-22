@@ -1,48 +1,66 @@
+import 'package:buy_buy/bloc/product/product_bloc.dart';
+import 'package:buy_buy/features/features.dart';
+import 'package:buy_buy/repositories/repositories.dart';
+import 'package:buy_buy/router/router.dart';
+import 'package:buy_buy/ui/ui.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '/providers/category_provider.dart';
-import '/widgets/category_selector.dart';
-import '/widgets/hot_sales_block.dart';
-import '/widgets/main_header.dart';
-import '/widgets/search_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CategoryProvider()),
-      ],
-      child: MyApp(),
-    )
-  );
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(BuyBuyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BuyBuyApp extends StatefulWidget {
+  const BuyBuyApp({super.key});
+
+  @override
+  State<BuyBuyApp> createState() => _BuyBuyAppState();
+}
+
+class _BuyBuyAppState extends State<BuyBuyApp> {
+  final _router = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: 'MarkPro'),
-      debugShowCheckedModeBanner: false,
-      title: 'Material App',
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                spacing: 10,
-                children: [
-                  MainHeader(),
-                  CategorySelector(),
-                  CustomSearchBar(),
-                  HotSalesBlock(),
-                ],
-              ),
-            ),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<UserRepositoryInterface>(create: (context) => UserRepository()),
+        RepositoryProvider<CategoryRepositoryInterface>(create: (context) => CategoryRepository()),
+        RepositoryProvider<ProductRepositoryInterface>(create: (context) => ProductRepository()),
+        RepositoryProvider<FavoriteRepositoryInterface>(create: (context) => FavoriteRepository()),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => AuthBloc(userRepository: context.read<UserRepositoryInterface>())),
+          BlocProvider(
+            create: (context) => CategoryBloc(categoryRepository: context.read<CategoryRepositoryInterface>()),
           ),
+          BlocProvider(
+            create:
+                (context) => ProductBloc(
+                  productRepository: context.read<ProductRepositoryInterface>(),
+                  favoriteRepository: context.read<FavoriteRepositoryInterface>(),
+                ),
+          ),
+          BlocProvider(create: (context) => BrandBloc(productRepository: context.read<ProductRepositoryInterface>())),
+          BlocProvider(
+            create:
+                (context) => FavoritesBloc(
+                  favoriteRepository: context.read<FavoriteRepositoryInterface>(),
+                  productRepository: context.read<ProductRepositoryInterface>(),
+                ),
+          ),
+        ],
+        child: MaterialApp.router(
+          theme: themeData,
+          debugShowCheckedModeBanner: false,
+          title: 'Buy-Buy',
+          routerConfig: _router.config(),
         ),
       ),
     );
