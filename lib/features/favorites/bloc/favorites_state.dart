@@ -20,8 +20,8 @@ final class FavoritesLoaded extends FavoritesState {
   List<Object?> get props => super.props..add(favorites);
 }
 
-final class FavoritesLoadError extends FavoritesState {
-  const FavoritesLoadError({this.error});
+final class FavoritesLoadFailed extends FavoritesState {
+  const FavoritesLoadFailed({this.error});
 
   final Object? error;
 

@@ -4,14 +4,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductRepository implements ProductRepositoryInterface {
   final CollectionReference _products = FirebaseFirestore.instance.collection('products');
+  final CollectionReference _brands = FirebaseFirestore.instance.collection('brands');
 
   @override
-  Future<List<Product>> getProducts({String? categoryId, String? query}) async {
+  Future<List<Product>> getProducts({String? categoryId, String? query, String? brandId, bool? isBrandNew}) async {
     try {
       Query queryRef = _products;
 
       if (categoryId != null && categoryId != allCategory.id) {
         queryRef = queryRef.where('categoryId', isEqualTo: categoryId);
+      }
+
+      if (brandId != null && brandId.isNotEmpty) {
+        queryRef = queryRef.where('brandId', isEqualTo: brandId);
+      }
+
+      if (isBrandNew != null) {
+        queryRef = queryRef.where('isBrandNew', isEqualTo: isBrandNew);
       }
 
       final snapshot = await queryRef.get();
@@ -45,6 +54,19 @@ class ProductRepository implements ProductRepositoryInterface {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<List<Brand>> getBrands() async {
+    try {
+      final snapshot = await _brands.get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return Brand.fromJson({...data, 'documentID': doc.id});
+      }).toList();
+    } catch (e) {
+      return [];
     }
   }
 }

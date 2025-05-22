@@ -25,11 +25,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   _onLoad(ProductLoadEvent event, Emitter<ProductState> emit) async {
     emit(ProductLoading());
     try {
-      final products = await _productRepository.getProducts(categoryId: event.categoryId, query: event.query);
+      final products = await _productRepository.getProducts(
+        categoryId: event.categoryId,
+        query: event.query,
+        brandId: event.filter?.brandId,
+        isBrandNew: event.filter?.isBrandNew,
+      );
       final favoriteIds = await _favoriteRepository.getFavoriteIds();
-      emit(ProductLoaded(products: products, favoriteIds: favoriteIds));
+      emit(ProductLoaded(products: products, favoriteIds: favoriteIds, filter: event.filter));
     } catch (e) {
-      emit(ProductFailure(error: e));
+      emit(ProductLoadFailed(error: e));
     }
   }
 
@@ -41,9 +46,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final favoritesIds = await _favoriteRepository.getFavoriteIds();
       emit(previousState.copyWith(favoriteIds: favoritesIds));
     } catch (e) {
-      emit(ProductFailure(error: e));
+      emit(ProductLoadFailed(error: e));
     } finally {
       event.completer?.complete();
     }
+  }
+
+  ProductFilter? getCurrentFilter() {
+    if (state is ProductLoaded) {
+      return (state as ProductLoaded).filter;
+    }
+    return null;
   }
 }

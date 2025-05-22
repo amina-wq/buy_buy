@@ -24,7 +24,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       final categories = await _categoryRepository.getAllCategories();
       emit(CategoryLoaded(categories: categories, selectedCategory: event.selectedCategory));
     } catch (e) {
-      emit(CategoryFailure(error: e));
+      emit(CategoryLoadFailed(error: e));
     } finally {
       event.completer?.complete();
     }
@@ -36,5 +36,12 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emit(CategoryLoaded(categories: currentState.categories, selectedCategory: event.category));
     }
     event.completer?.complete();
+  }
+
+  Category getSelectedCategory() {
+    if (state is CategoryLoaded) {
+      return (state as CategoryLoaded).selectedCategory;
+    }
+    return allCategory;
   }
 }

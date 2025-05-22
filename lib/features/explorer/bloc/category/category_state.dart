@@ -21,8 +21,8 @@ final class CategoryLoaded extends CategoryState {
   List<Object> get props => super.props..add([categories, selectedCategory]);
 }
 
-final class CategoryFailure extends CategoryState {
-  const CategoryFailure({required this.error});
+final class CategoryLoadFailed extends CategoryState {
+  const CategoryLoadFailed({required this.error});
 
   final Object error;
 

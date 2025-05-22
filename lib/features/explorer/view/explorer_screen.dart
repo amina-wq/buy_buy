@@ -159,7 +159,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                       },
                       itemCount: products.length,
                     );
-                  } else if (state is ProductFailure) {
+                  } else if (state is ProductLoadFailed) {
                     return SliverToBoxAdapter(child: Center(child: Text('Error loading products')));
                   } else {
                     return SliverToBoxAdapter(child: Text('No products available'));
@@ -174,23 +174,35 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
   }
 
   Future<void> _onFilterPressed() async {
-    final options = await showModalBottomSheet(
+    final CategoryBloc categoryBloc = context.read<CategoryBloc>();
+    final ProductBloc productBloc = context.read<ProductBloc>();
+
+    final ProductFilter? currentFilter = productBloc.getCurrentFilter();
+
+    final ProductFilter? filter = await showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
       context: context,
       builder: (context) {
-        return Padding(padding: const EdgeInsets.only(top: 90), child: FilterProductsBottomSheet());
+        return Padding(
+          padding: const EdgeInsets.only(top: 220),
+          child: FilterProductsBottomSheet(initialFilter: currentFilter),
+        );
       },
     );
+
+    if (filter != null) {
+      final selectedCategory = categoryBloc.getSelectedCategory();
+      productBloc.add(ProductLoadEvent(categoryId: selectedCategory.id, filter: filter));
+    }
   }
 
   Future<void> _showSearchBottomSheet() async {
     final ProductBloc productBloc = context.read<ProductBloc>();
     final CategoryBloc categoryBloc = context.read<CategoryBloc>();
 
-    final selectedCategory =
-        categoryBloc.state is CategoryLoaded ? (categoryBloc.state as CategoryLoaded).selectedCategory : allCategory;
+    final selectedCategory = categoryBloc.getSelectedCategory();
 
     final query = await showModalBottomSheet<String>(
       isScrollControlled: true,
@@ -233,13 +245,11 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
     final categoryBloc = context.read<CategoryBloc>();
     final productBloc = context.read<ProductBloc>();
 
-    if (categoryBloc.state is CategoryLoaded) {
-      final category = (categoryBloc.state as CategoryLoaded).selectedCategory;
-      categoryBloc.add(CategoryLoadEvent(selectedCategory: category));
-      productBloc.add(ProductLoadEvent(categoryId: category.id));
-    } else {
-      categoryBloc.add(CategoryLoadEvent(selectedCategory: allCategory));
-    }
+    final Category currentCategory = categoryBloc.getSelectedCategory();
+    final ProductFilter? currentFilter = productBloc.getCurrentFilter();
+
+    categoryBloc.add(CategoryLoadEvent(selectedCategory: currentCategory));
+    productBloc.add(ProductLoadEvent(categoryId: currentCategory.id, filter: currentFilter));
   }
 
   _handleAuthState(BuildContext context, AuthState state) {
@@ -247,17 +257,18 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
       final categoryBloc = context.read<CategoryBloc>();
       final productBloc = context.read<ProductBloc>();
 
-      if (categoryBloc.state is CategoryLoaded) {
-        productBloc.add(ProductLoadEvent(categoryId: allCategory.id));
-      }
+      categoryBloc.add(CategoryLoadEvent(selectedCategory: allCategory));
+      productBloc.add(ProductLoadEvent(categoryId: allCategory.id));
     }
   }
 
   _handleCategoryState(BuildContext context, CategoryState state) {
     if (state is CategoryLoaded) {
-      final category = state.selectedCategory;
+      final Category category = state.selectedCategory;
       final ProductBloc productBloc = context.read<ProductBloc>();
-      productBloc.add(ProductLoadEvent(categoryId: category.id));
+
+      final ProductFilter? currentFilter = productBloc.getCurrentFilter();
+      productBloc.add(ProductLoadEvent(categoryId: category.id, filter: currentFilter));
     }
   }
 
@@ -265,7 +276,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
     final FavoritesBloc favoritesBloc = context.read<FavoritesBloc>();
     final ProductBloc productBloc = context.read<ProductBloc>();
 
-    final completer = Completer();
+    final Completer completer = Completer();
     productBloc.add(ToggleFavoriteProductEvent(productId: product.id, completer: completer));
     await completer.future;
     favoritesBloc.add(FavoritesLoadEvent());

@@ -30,7 +30,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       final favorites = allProducts.where((product) => favoritesId.contains(product.id)).toList();
       emit(FavoritesLoaded(favorites: favorites));
     } catch (e) {
-      emit(FavoritesLoadError(error: e));
+      emit(FavoritesLoadFailed(error: e));
     }
   }
 

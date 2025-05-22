@@ -78,7 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
       emit(Authorized(profile: profile));
     } catch (e) {
-      emit(ProfileUpdateError(error: e));
+      emit(ProfileUpdateFailed(error: e));
       emit(state);
     }
   }

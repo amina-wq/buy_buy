@@ -32,8 +32,8 @@ final class Unauthorized extends AuthState {
 
 final class ProfileUpdating extends AuthState {}
 
-final class ProfileUpdateError extends AuthState {
-  const ProfileUpdateError({this.error});
+final class ProfileUpdateFailed extends AuthState {
+  const ProfileUpdateFailed({this.error});
 
   final Object? error;
 

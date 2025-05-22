@@ -27,7 +27,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final products = await _productRepository.getProducts(categoryId: event.category.id, query: query);
       emit(SearchLoaded(filteredProducts: products));
     } catch (e) {
-      emit(SearchFailure(error: e));
+      emit(SearchLoadFailed(error: e));
     }
   }
 }

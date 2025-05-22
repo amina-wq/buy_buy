@@ -78,7 +78,7 @@ class SearchProductsBottomSheet extends StatelessWidget {
                             return ProductListTile(product: product, onTap: () => _onProductTap(context, product));
                           },
                         );
-                      } else if (state is SearchFailure) {
+                      } else if (state is SearchLoadFailed) {
                         return Center(child: Text('Failed to load products'));
                       } else {
                         return const Center(child: Text('No products found'));

@@ -152,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     }
 
-    if (state is ProfileUpdateError) {
+    if (state is ProfileUpdateFailed) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Update failed: ${state.error}")));
     }
   }

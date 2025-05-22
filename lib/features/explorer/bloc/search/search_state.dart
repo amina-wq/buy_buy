@@ -20,8 +20,8 @@ final class SearchLoaded extends SearchState {
   List<Object> get props => super.props..addAll(filteredProducts);
 }
 
-final class SearchFailure extends SearchState {
-  const SearchFailure({required this.error});
+final class SearchLoadFailed extends SearchState {
+  const SearchLoadFailed({required this.error});
 
   final Object error;
 

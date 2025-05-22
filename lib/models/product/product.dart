@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+export 'filter.dart';
+
 part 'product.g.dart';
 
 @JsonSerializable()

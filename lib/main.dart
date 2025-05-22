@@ -1,5 +1,4 @@
 import 'package:buy_buy/bloc/product/product_bloc.dart';
-import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
 import 'package:buy_buy/features/features.dart';
 import 'package:buy_buy/repositories/repositories.dart';
 import 'package:buy_buy/router/router.dart';
@@ -48,6 +47,7 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
                   favoriteRepository: context.read<FavoriteRepositoryInterface>(),
                 ),
           ),
+          BlocProvider(create: (context) => BrandBloc(productRepository: context.read<ProductRepositoryInterface>())),
           BlocProvider(
             create:
                 (context) => FavoritesBloc(
