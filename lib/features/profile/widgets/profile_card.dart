@@ -24,8 +24,9 @@ class ProfileCard extends StatelessWidget {
               decoration: BoxDecoration(shape: BoxShape.circle, color: theme.cardColor),
               child: CircleAvatar(
                 radius: 64,
-                backgroundImage: NetworkImage(profile.avatarUrl),
+                foregroundImage: NetworkImage(profile.avatarUrl),
                 backgroundColor: theme.scaffoldBackgroundColor,
+                child: const Icon(Icons.person_outlined, size: 96),
               ),
             ),
           ),
