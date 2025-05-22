@@ -74,13 +74,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 16,
                     children: [
                       ProfileCard(
                         profile: state.profile,
                         nameBuilder: isEditing ? _nameBuilder : null,
                         genderBuilder: isEditing ? _genderBuilder : null,
                       ),
-                      const SizedBox(height: 15),
                       BaseCard(
                         padding: const EdgeInsets.all(4),
                         child: ListTile(
@@ -101,7 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
                       BaseCard(
                         padding: const EdgeInsets.all(4),
                         child: ListTile(
@@ -119,7 +118,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      BaseCard(
+                        padding: EdgeInsets.all(4),
+                        width: double.infinity,
+                        child: TextButton(
+                            onPressed: _onLogout,
+                            child: Text("Logout", style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, fontSize: 20))
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -216,4 +222,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     context.read<AuthBloc>().add(ProfileUpdateEvent(updatedProfile: updatedProfile));
   }
+
+  void _onLogout() {
+    final router = AutoTabsRouter.of(context);
+    context.read<AuthBloc>().add(AuthLogOutEvent());
+    router.setActiveIndex(0);
+  }
+
 }
