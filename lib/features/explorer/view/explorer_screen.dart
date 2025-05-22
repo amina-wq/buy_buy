@@ -31,134 +31,138 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          snap: true,
-          pinned: true,
-          floating: true,
-          centerTitle: true,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          title: GestureDetector(
-            onTap: () => {},
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.room_outlined, color: theme.hintColor, size: 16),
-                Text("Zihutanejo, Gro", style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
-                Icon(Icons.keyboard_arrow_down, size: 16),
-              ],
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            snap: true,
+            pinned: true,
+            floating: true,
+            centerTitle: true,
+            elevation: 0,
+            surfaceTintColor: Colors.transparent,
+            title: GestureDetector(
+              onTap: () => {},
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.room_outlined, color: theme.hintColor, size: 16),
+                  Text("Zihutanejo, Gro", style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+                  Icon(Icons.keyboard_arrow_down, size: 16),
+                ],
+              ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: _onFilterPressed,
+                icon: Icon(Icons.filter_alt_outlined, size: 24),
+                color: theme.hintColor,
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(58),
+              child: SearchButton(onTap: _showSearchBottomSheet, controller: _searchController),
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: _onFilterPressed,
-              icon: Icon(Icons.filter_alt_outlined, size: 24),
-              color: theme.hintColor,
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(58),
-            child: SearchButton(onTap: _showSearchBottomSheet, controller: _searchController),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(16).copyWith(top: 0),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 8,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Select Category', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
-                    TextButton(
-                      onPressed: _onViewAllPressed,
-                      child: Text('view all', style: TextStyle(color: theme.hintColor)),
-                    ),
-                  ],
-                ),
-                BlocConsumer<CategoryBloc, CategoryState>(
-                  listener: _handleCategoryState,
-                  builder: (context, state) {
-                    if (state is CategoryLoading) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (state is CategoryLoaded) {
-                      final categories = [allCategory, ...state.categories];
-                      return SizedBox(
-                        height: 72,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            Category category = categories[index];
-                            return CategoryButton(
-                              onTap: () => _onSwitchCategory(category),
-                              category: category,
-                              isSelected: category.id == state.selectedCategory.id,
-                            );
-                          },
-                          separatorBuilder: (context, index) => SizedBox(width: 16),
-                          itemCount: state.categories.length + 1,
-                        ),
-                      );
-                    } else {
-                      return Center(child: Text('Error loading categories'));
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(16).copyWith(top: 0),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Hot Seller', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
-                TextButton(onPressed: () => {}, child: Text('see more', style: TextStyle(color: theme.hintColor))),
-              ],
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(16),
-          sliver: BlocBuilder<ProductBloc, ProductState>(
-            builder: (context, state) {
-              if (state is ProductLoading) {
-                return SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
-              } else if (state is ProductLoaded) {
-                final products = state.products;
-                return SliverGrid.builder(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 0.65,
+          SliverPadding(
+            padding: EdgeInsets.all(16).copyWith(top: 0),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 8,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Select Category', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
+                      TextButton(
+                        onPressed: _onViewAllPressed,
+                        child: Text('view all', style: TextStyle(color: theme.hintColor)),
+                      ),
+                    ],
                   ),
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return ProductCard(
-                      isFavorite: state.favoriteIds.contains(product.id),
-                      product: product,
-                      onTap: () => {},
-                      onToggleFavorite: () => _onToggleFavorite(product),
-                    );
-                  },
-                  itemCount: products.length,
-                );
-              } else if (state is ProductFailure) {
-                return SliverToBoxAdapter(child: Center(child: Text('Error loading products')));
-              } else {
-                return SliverToBoxAdapter(child: Text('No products available'));
-              }
-            },
+                  BlocConsumer<CategoryBloc, CategoryState>(
+                    listener: _handleCategoryState,
+                    builder: (context, state) {
+                      if (state is CategoryLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is CategoryLoaded) {
+                        final categories = [allCategory, ...state.categories];
+                        return SizedBox(
+                          height: 72,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              Category category = categories[index];
+                              return CategoryButton(
+                                onTap: () => _onSwitchCategory(category),
+                                category: category,
+                                isSelected: category.id == state.selectedCategory.id,
+                              );
+                            },
+                            separatorBuilder: (context, index) => SizedBox(width: 16),
+                            itemCount: state.categories.length + 1,
+                          ),
+                        );
+                      } else {
+                        return Center(child: Text('Error loading categories'));
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ],
+          SliverPadding(
+            padding: EdgeInsets.all(16).copyWith(top: 0),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Hot Seller', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
+                  TextButton(onPressed: () => {}, child: Text('see more', style: TextStyle(color: theme.hintColor))),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.all(16),
+            sliver: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, state) {
+                if (state is ProductLoading) {
+                  return SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
+                } else if (state is ProductLoaded) {
+                  final products = state.products;
+                  return SliverGrid.builder(
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.65,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return ProductCard(
+                        isFavorite: state.favoriteIds.contains(product.id),
+                        product: product,
+                        onTap: () => {},
+                        onToggleFavorite: () => _onToggleFavorite(product),
+                      );
+                    },
+                    itemCount: products.length,
+                  );
+                } else if (state is ProductFailure) {
+                  return SliverToBoxAdapter(child: Center(child: Text('Error loading products')));
+                } else {
+                  return SliverToBoxAdapter(child: Text('No products available'));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -216,6 +220,19 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
   Future<void> _loadPage(Category selectedCategory) async {
     final CategoryBloc categoryBloc = context.read<CategoryBloc>();
     categoryBloc.add(CategoryLoadEvent(selectedCategory: selectedCategory));
+  }
+
+  Future<void> _onRefresh() async {
+    final categoryBloc = context.read<CategoryBloc>();
+    final productBloc = context.read<ProductBloc>();
+
+    if (categoryBloc.state is CategoryLoaded) {
+      final category = (categoryBloc.state as CategoryLoaded).selectedCategory;
+      categoryBloc.add(CategoryLoadEvent(selectedCategory: category));
+      productBloc.add(ProductLoadEvent(categoryId: category.id));
+    } else {
+      categoryBloc.add(CategoryLoadEvent(selectedCategory: allCategory));
+    }
   }
 
   _handleCategoryState(BuildContext context, CategoryState state) {

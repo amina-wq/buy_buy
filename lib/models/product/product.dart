@@ -18,6 +18,8 @@ class Product {
 
   final String brandId;
 
+  final bool isBrandNew;
+
   Product({
     required this.id,
     required this.name,
@@ -27,6 +29,7 @@ class Product {
     required this.imageUrl,
     required this.categoryId,
     required this.brandId,
+    required this.isBrandNew,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);

@@ -44,6 +44,21 @@ class ProductCard extends StatelessWidget {
                       errorBuilder: (context, _, __) => const Center(child: Icon(Icons.broken_image)),
                     ),
                   ),
+                  if (!product.isBrandNew)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(color: theme.highlightColor, borderRadius: BorderRadius.circular(8)),
+                        child: Text(
+                          'SH',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
                   Positioned(
                     top: 8,
                     right: 8,
