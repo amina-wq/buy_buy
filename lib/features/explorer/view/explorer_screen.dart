@@ -253,7 +253,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
   }
 
   _handleAuthState(BuildContext context, AuthState state) {
-    if (state is Authorized) {
+    if (state is Authorized || state is Unauthorized) {
       final categoryBloc = context.read<CategoryBloc>();
       final productBloc = context.read<ProductBloc>();
 

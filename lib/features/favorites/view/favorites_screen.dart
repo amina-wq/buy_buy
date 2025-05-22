@@ -23,48 +23,50 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: _handleAuthState,
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(snap: true, pinned: true, floating: true, centerTitle: true, title: const Text('Favorites')),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: BlocBuilder<FavoritesBloc, FavoritesState>(
-              builder: (context, state) {
-                if (state is FavoritesLoading) {
-                  return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
-                } else if (state is FavoritesLoaded) {
-                  final favorites = state.favorites;
-                  if (favorites.isEmpty) {
-                    return const SliverFillRemaining(
-                      child: Center(child: Text('No favorites found. Try adding some!')),
-                    );
-                  }
-
-                  return SliverGrid.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.65,
-                    ),
-                    itemCount: favorites.length,
-                    itemBuilder: (context, index) {
-                      final product = favorites[index];
-                      return ProductCard(
-                        isFavorite: true,
-                        product: product,
-                        onTap: () {},
-                        onToggleFavorite: () => _onRemoveFavorite(product),
+      child: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(snap: true, pinned: true, floating: true, centerTitle: true, title: const Text('Favorites')),
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: BlocBuilder<FavoritesBloc, FavoritesState>(
+                builder: (context, state) {
+                  if (state is FavoritesLoading) {
+                    return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
+                  } else if (state is FavoritesLoaded) {
+                    final favorites = state.favorites;
+                    if (favorites.isEmpty) {
+                      return const SliverFillRemaining(
+                        child: Center(child: Text('No favorites found. Try adding some!')),
                       );
-                    },
-                  );
-                } else {
-                  return const SliverToBoxAdapter(child: Center(child: Text('No favorites found')));
-                }
-              },
+                    }
+                    return SliverGrid.builder(
+                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.65,
+                      ),
+                      itemCount: favorites.length,
+                      itemBuilder: (context, index) {
+                        final product = favorites[index];
+                        return ProductCard(
+                          isFavorite: true,
+                          product: product,
+                          onTap: () {},
+                          onToggleFavorite: () => _onRemoveFavorite(product),
+                        );
+                      },
+                    );
+                  } else {
+                    return const SliverToBoxAdapter(child: Center(child: Text('No favorites found')));
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -87,6 +89,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   _handleAuthState(BuildContext context, state) {
     if (state is Authorized) {
       context.read<FavoritesBloc>().add(FavoritesLoadEvent());
+    }
+  }
+
+  Future<void> _onRefresh() async {
+    final favoritesBloc = context.read<FavoritesBloc>();
+    final authBloc = context.read<AuthBloc>();
+
+    if (authBloc.state is Authorized) {
+      favoritesBloc.add(FavoritesLoadEvent());
     }
   }
 }

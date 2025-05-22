@@ -9,7 +9,7 @@ class FavoriteRepository implements FavoriteRepositoryInterface {
   @override
   Future<List<String>> getFavoriteIds() async {
     final uid = _firebaseAuth.currentUser?.uid;
-    if (uid == null) throw Exception('User not authenticated');
+    if (uid == null) return [];
 
     try {
       final doc = await _favorites.doc(uid).get();
