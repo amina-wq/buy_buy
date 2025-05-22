@@ -51,12 +51,7 @@ class ProductCard extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(color: theme.highlightColor, borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          'SH',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: Text('SH', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),
                       ),
                     ),
                   Positioned(
