@@ -1,5 +1,7 @@
+import 'package:buy_buy/features/auth/auth.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -54,21 +56,31 @@ class ProductCard extends StatelessWidget {
                         child: Text('SH', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),
                       ),
                     ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: onToggleFavorite,
-                      child: Container(
-                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.8), shape: BoxShape.circle),
-                        padding: const EdgeInsets.all(6),
-                        child: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          size: 16,
-                          color: isFavorite ? theme.primaryColor : theme.hintColor,
-                        ),
-                      ),
-                    ),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, authState) {
+                      if (authState is Authorized) {
+                        return Positioned(
+                          top: 8,
+                          right: 8,
+                          child: GestureDetector(
+                            onTap: onToggleFavorite,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(6),
+                              child: Icon(
+                                isFavorite ? Icons.favorite : Icons.favorite_border,
+                                size: 16,
+                                color: isFavorite ? theme.primaryColor : theme.hintColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
                   ),
                 ],
               ),
