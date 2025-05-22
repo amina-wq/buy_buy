@@ -44,7 +44,7 @@ class UserRepository implements UserRepositoryInterface {
       id: user.uid,
       email: email,
       phone: phoneNumber,
-      name: '',
+      name: 'Unknown User',
       gender: Gender.unknown,
       dateOfBirth: DateTime.now(),
       avatarUrl: '',

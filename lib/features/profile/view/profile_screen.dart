@@ -122,10 +122,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: EdgeInsets.all(4),
                         width: double.infinity,
                         child: TextButton(
-                            onPressed: _onLogout,
-                            child: Text("Logout", style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, fontSize: 20))
+                          onPressed: _onLogout,
+                          child: Text(
+                            "Logout",
+                            style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -142,8 +145,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _handleAuthState(BuildContext context, AuthState state) {
-    if (state is Authorized && isEditing) {
-      setState(() => isEditing = false);
+    if (state is Authorized) {
+      setState(() {
+        isEditing = false;
+        _initializeFields(state.profile);
+      });
     }
 
     if (state is ProfileUpdateError) {
@@ -228,5 +234,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     context.read<AuthBloc>().add(AuthLogOutEvent());
     router.setActiveIndex(0);
   }
-
 }
