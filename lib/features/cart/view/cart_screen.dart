@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/bloc/cart/cart_bloc.dart';
-import 'package:buy_buy/features/auth/bloc/auth_bloc.dart';
+import 'package:buy_buy/bloc/auth/auth_bloc.dart';
 import 'package:buy_buy/features/cart/widgets/cart_item_list_tile.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:flutter/material.dart';

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/bloc/product/product_bloc.dart';
-import 'package:buy_buy/features/auth/bloc/auth_bloc.dart';
-import 'package:buy_buy/features/explorer/bloc/category/category_bloc.dart';
-import 'package:buy_buy/features/favorites/bloc/favorites_bloc.dart';
+import 'package:buy_buy/bloc/auth/auth_bloc.dart';
+import 'package:buy_buy/bloc/category/category_bloc.dart';
+import 'package:buy_buy/bloc/favorites/favorites_bloc.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:buy_buy/ui/ui.dart';
 import 'package:flutter/material.dart';
