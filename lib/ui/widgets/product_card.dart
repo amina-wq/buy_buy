@@ -8,12 +8,14 @@ class ProductCard extends StatelessWidget {
     super.key,
     required this.product,
     required this.onTap,
+    this.onAddToCart,
     required this.onToggleFavorite,
     this.isFavorite = false,
   });
 
   final Product product;
   final VoidCallback onTap;
+  final VoidCallback? onAddToCart;
   final VoidCallback onToggleFavorite;
   final bool isFavorite;
 
@@ -32,78 +34,93 @@ class ProductCard extends StatelessWidget {
           ],
         ),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
             AspectRatio(
               aspectRatio: 1,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.network(
-                      product.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, _, __) => const Center(child: Icon(Icons.broken_image)),
-                    ),
-                  ),
-                  if (!product.isBrandNew)
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(color: theme.highlightColor, borderRadius: BorderRadius.circular(8)),
-                        child: Text('SH', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),
-                      ),
-                    ),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, authState) {
-                      if (authState is Authorized) {
-                        return Positioned(
-                          top: 8,
-                          right: 8,
-                          child: GestureDetector(
-                            onTap: onToggleFavorite,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.8),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(6),
-                              child: Icon(
-                                isFavorite ? Icons.favorite : Icons.favorite_border,
-                                size: 16,
-                                color: isFavorite ? theme.primaryColor : theme.hintColor,
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
+              child: Image.network(
+                product.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 4,
-                children: [
-                  Text(
-                    'RM ${product.price.toStringAsFixed(2)}',
-                    style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Text(product.name, style: theme.textTheme.bodyMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  if (product.characteristics?.isNotEmpty == true)
-                    Text(
-                      product.characteristics!,
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+
+            if (!product.isBrandNew)
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(color: theme.highlightColor, borderRadius: BorderRadius.circular(8)),
+                  child: Text('SH', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),
+                ),
+              ),
+
+            if (onAddToCart != null)
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is! Authorized) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: const Icon(Icons.add_shopping_cart, size: 20),
+                      color: theme.primaryColor,
+                      onPressed: onAddToCart,
+                      tooltip: 'Add to cart',
                     ),
-                ],
+                  );
+                },
+              ),
+
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                if (authState is! Authorized) {
+                  return const SizedBox.shrink();
+                }
+                return Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: onToggleFavorite,
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.8), shape: BoxShape.circle),
+                      padding: const EdgeInsets.all(6),
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        size: 16,
+                        color: isFavorite ? theme.primaryColor : theme.hintColor,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              bottom: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 4,
+                  children: [
+                    Text(
+                      'RM ${product.price.toStringAsFixed(2)}',
+                      style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    Text(product.name, style: theme.textTheme.bodyMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    if (product.characteristics?.isNotEmpty == true)
+                      Text(
+                        product.characteristics!,
+                        style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
               ),
             ),
           ],

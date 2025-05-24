@@ -1,3 +1,5 @@
+export 'cart/cart_repository.dart';
+export 'cart/cart_repository_interface.dart';
 export 'category/category_repository.dart';
 export 'category/category_repository_interface.dart';
 export 'favorite/favorite_repository.dart';

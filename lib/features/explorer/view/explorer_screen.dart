@@ -155,6 +155,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                           product: product,
                           onTap: () => {},
                           onToggleFavorite: () => _onToggleFavorite(product),
+                          onAddToCart: () => _onAddToCart(product),
                         );
                       },
                       itemCount: products.length,
@@ -280,5 +281,10 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
     productBloc.add(ToggleFavoriteProductEvent(productId: product.id, completer: completer));
     await completer.future;
     favoritesBloc.add(FavoritesLoadEvent());
+  }
+  
+  _onAddToCart(Product product) async {
+    final CartBloc cartBloc = context.read<CartBloc>();
+    cartBloc.add(AddToCartEvent(product: product));
   }
 }

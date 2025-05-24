@@ -1,4 +1,4 @@
-import 'package:buy_buy/bloc/product/product_bloc.dart';
+import 'package:buy_buy/bloc/bloc.dart';
 import 'package:buy_buy/features/features.dart';
 import 'package:buy_buy/repositories/repositories.dart';
 import 'package:buy_buy/router/router.dart';
@@ -33,6 +33,7 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
         RepositoryProvider<CategoryRepositoryInterface>(create: (context) => CategoryRepository()),
         RepositoryProvider<ProductRepositoryInterface>(create: (context) => ProductRepository()),
         RepositoryProvider<FavoriteRepositoryInterface>(create: (context) => FavoriteRepository()),
+        RepositoryProvider<CartRepositoryInterface>(create: (context) => CartRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -52,6 +53,13 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
             create:
                 (context) => FavoritesBloc(
                   favoriteRepository: context.read<FavoriteRepositoryInterface>(),
+                  productRepository: context.read<ProductRepositoryInterface>(),
+                ),
+          ),
+          BlocProvider(
+            create:
+                (context) => CartBloc(
+                  cartRepository: context.read<CartRepositoryInterface>(),
                   productRepository: context.read<ProductRepositoryInterface>(),
                 ),
           ),
