@@ -24,7 +24,7 @@ final _listTileTheme = ListTileThemeData(
 );
 
 final _appBarTheme = AppBarTheme(
-  titleTextStyle: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600, fontSize: 24),
+  titleTextStyle: TextStyle(color: _primaryColor, fontWeight: FontWeight.w600, fontSize: 24, fontFamily: 'MarkPro'),
 );
 
 final themeData = ThemeData(
