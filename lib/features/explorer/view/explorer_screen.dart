@@ -124,13 +124,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
             SliverPadding(
               padding: EdgeInsets.all(16).copyWith(top: 0),
               sliver: SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Hot Seller', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
-                    TextButton(onPressed: () => {}, child: Text('see more', style: TextStyle(color: theme.hintColor))),
-                  ],
-                ),
+                child: Text('Our products', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
               ),
             ),
             SliverPadding(
