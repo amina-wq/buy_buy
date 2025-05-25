@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/features/features.dart';
 
@@ -25,5 +26,6 @@ class AppRouter extends RootStackRouter {
       ],
     ),
     AutoRoute(page: AuthRoute.page, path: '/auth'),
+    AutoRoute(page: ProductDetailRoute.page, path: '/product/:id'),
   ];
 }

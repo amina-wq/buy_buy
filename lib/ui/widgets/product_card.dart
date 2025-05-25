@@ -1,5 +1,7 @@
 import 'package:buy_buy/features/auth/auth.dart';
 import 'package:buy_buy/models/models.dart';
+import 'package:buy_buy/ui/ui.dart';
+import 'package:buy_buy/ui/widgets/base_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +41,7 @@ class ProductCard extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
-                product.imageUrl,
+                product.imageUrls[0],
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image)),
               ),
@@ -49,9 +51,7 @@ class ProductCard extends StatelessWidget {
               Positioned(
                 top: 8,
                 left: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(color: theme.highlightColor, borderRadius: BorderRadius.circular(8)),
+                child: BaseTag(
                   child: Text('SH', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600)),
                 ),
               ),
@@ -84,18 +84,7 @@ class ProductCard extends StatelessWidget {
                 return Positioned(
                   top: 8,
                   right: 8,
-                  child: GestureDetector(
-                    onTap: onToggleFavorite,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.8), shape: BoxShape.circle),
-                      padding: const EdgeInsets.all(6),
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        size: 16,
-                        color: isFavorite ? theme.primaryColor : theme.hintColor,
-                      ),
-                    ),
-                  ),
+                  child: FavoriteButton(isFavorite: isFavorite, onToggleFavorite: onToggleFavorite, size: 16),
                 );
               },
             ),

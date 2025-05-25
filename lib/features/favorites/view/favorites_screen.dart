@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:buy_buy/bloc/product/product_bloc.dart';
 import 'package:buy_buy/bloc/auth/auth_bloc.dart';
 import 'package:buy_buy/bloc/category/category_bloc.dart';
 import 'package:buy_buy/bloc/favorites/favorites_bloc.dart';
+import 'package:buy_buy/bloc/product/product_bloc.dart';
 import 'package:buy_buy/models/models.dart';
+import 'package:buy_buy/router/router.dart';
 import 'package:buy_buy/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +55,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         return ProductCard(
                           isFavorite: true,
                           product: product,
-                          onTap: () {},
+                          onTap: () => _onProductTap(product),
                           onToggleFavorite: () => _onRemoveFavorite(product),
                         );
                       },
@@ -69,6 +70,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         ),
       ),
     );
+  }
+
+  _onProductTap(Product product) {
+    context.pushRoute(ProductDetailRoute(productId: product.id));
   }
 
   void _onRemoveFavorite(Product product) async {

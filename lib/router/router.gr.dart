@@ -123,6 +123,43 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProductDetailScreen]
+class ProductDetailRoute extends PageRouteInfo<ProductDetailRouteArgs> {
+  ProductDetailRoute({
+    Key? key,
+    required String productId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ProductDetailRoute.name,
+         args: ProductDetailRouteArgs(key: key, productId: productId),
+         initialChildren: children,
+       );
+
+  static const String name = 'ProductDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ProductDetailRouteArgs>();
+      return ProductDetailScreen(key: args.key, productId: args.productId);
+    },
+  );
+}
+
+class ProductDetailRouteArgs {
+  const ProductDetailRouteArgs({this.key, required this.productId});
+
+  final Key? key;
+
+  final String productId;
+
+  @override
+  String toString() {
+    return 'ProductDetailRouteArgs{key: $key, productId: $productId}';
+  }
+}
+
+/// generated route for
 /// [ProfileScreen]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})

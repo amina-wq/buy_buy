@@ -17,7 +17,7 @@ class ProductListTile extends StatelessWidget {
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
-          product.imageUrl,
+          product.imageUrls[0],
           width: 48,
           height: 48,
           fit: BoxFit.cover,

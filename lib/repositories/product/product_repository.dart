@@ -43,17 +43,17 @@ class ProductRepository implements ProductRepositoryInterface {
   }
 
   @override
-  Future<Product> getProductById(String productId) async {
+  Future<Product?> getProductById(String productId) async {
     try {
       final doc = await _products.doc(productId).get();
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
         return Product.fromJson(data..['documentID'] = doc.id);
       } else {
-        throw Exception('Product not found');
+        return null;
       }
     } catch (e) {
-      rethrow;
+      return null;
     }
   }
 

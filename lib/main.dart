@@ -48,6 +48,9 @@ class _BuyBuyAppState extends State<BuyBuyApp> {
                   favoriteRepository: context.read<FavoriteRepositoryInterface>(),
                 ),
           ),
+          BlocProvider(
+            create: (context) => ProductDetailBloc(productRepository: context.read<ProductRepositoryInterface>()),
+          ),
           BlocProvider(create: (context) => BrandBloc(productRepository: context.read<ProductRepositoryInterface>())),
           BlocProvider(
             create:

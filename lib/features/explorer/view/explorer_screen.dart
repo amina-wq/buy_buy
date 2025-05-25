@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:buy_buy/bloc/bloc.dart';
-import 'package:buy_buy/bloc/auth/auth_bloc.dart';
 import 'package:buy_buy/features/explorer/explorer.dart';
-import 'package:buy_buy/bloc/favorites/favorites_bloc.dart';
 import 'package:buy_buy/models/models.dart';
 import 'package:buy_buy/router/router.dart';
 import 'package:buy_buy/ui/ui.dart';
@@ -147,7 +145,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                         return ProductCard(
                           isFavorite: state.favoriteIds.contains(product.id),
                           product: product,
-                          onTap: () => {},
+                          onTap: () => _onProductTap(product),
                           onToggleFavorite: () => _onToggleFavorite(product),
                           onAddToCart: () => _onAddToCart(product),
                         );
@@ -265,6 +263,10 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
       final ProductFilter? currentFilter = productBloc.getCurrentFilter();
       productBloc.add(ProductLoadEvent(categoryId: category.id, filter: currentFilter));
     }
+  }
+
+  _onProductTap(Product product) {
+    context.pushRoute(ProductDetailRoute(productId: product.id));
   }
 
   _onToggleFavorite(Product product) async {

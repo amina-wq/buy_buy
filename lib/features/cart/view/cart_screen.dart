@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:buy_buy/bloc/cart/cart_bloc.dart';
 import 'package:buy_buy/bloc/auth/auth_bloc.dart';
+import 'package:buy_buy/bloc/cart/cart_bloc.dart';
 import 'package:buy_buy/features/cart/widgets/cart_item_list_tile.dart';
 import 'package:buy_buy/models/models.dart';
+import 'package:buy_buy/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,6 +54,7 @@ class _CartScreenState extends State<CartScreen> {
                           final detail = state.cartItems[i];
                           return CartItemListTile(
                             cartItem: detail,
+                            onTap: () => _onProductTap(detail.product),
                             onAdd: () => _onAddToCart(detail.product),
                             onRemove: () => _onRemoveFromCart(detail.product),
                           );
@@ -109,6 +111,10 @@ class _CartScreenState extends State<CartScreen> {
     if (state is Authorized) {
       context.read<CartBloc>().add(CartLoadEvent());
     }
+  }
+
+  void _onProductTap(Product product) {
+    context.router.push(ProductDetailRoute(productId: product.id));
   }
 
   void _onAddToCart(Product product) {

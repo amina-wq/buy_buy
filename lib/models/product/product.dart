@@ -14,7 +14,7 @@ class Product {
 
   final String? characteristics;
   final double price;
-  final String imageUrl;
+  final List<String> imageUrls;
 
   final String categoryId;
 
@@ -28,7 +28,7 @@ class Product {
     required this.description,
     this.characteristics,
     required this.price,
-    required this.imageUrl,
+    required this.imageUrls,
     required this.categoryId,
     required this.brandId,
     required this.isBrandNew,
