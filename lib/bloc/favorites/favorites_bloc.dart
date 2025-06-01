@@ -17,7 +17,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
        _productRepository = productRepository,
        super(FavoritesInitial()) {
     on<FavoritesLoadEvent>(_onLoad);
-    on<RemoveFavoriteEvent>(_onToggle);
+    on<ToggleFavoriteEvent>(_onToggle);
   }
 
   final FavoriteRepositoryInterface _favoriteRepository;
@@ -35,7 +35,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     }
   }
 
-  _onToggle(RemoveFavoriteEvent event, Emitter<FavoritesState> emit) async {
+  _onToggle(ToggleFavoriteEvent event, Emitter<FavoritesState> emit) async {
     try {
       await _favoriteRepository.toggleFavorite(event.product.id);
       add(FavoritesLoadEvent());

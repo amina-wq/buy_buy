@@ -9,8 +9,8 @@ sealed class FavoritesEvent extends Equatable {
 
 final class FavoritesLoadEvent extends FavoritesEvent {}
 
-final class RemoveFavoriteEvent extends FavoritesEvent {
-  const RemoveFavoriteEvent({required this.product, this.completer});
+final class ToggleFavoriteEvent extends FavoritesEvent {
+  const ToggleFavoriteEvent({required this.product, this.completer});
 
   final Product product;
   final Completer? completer;

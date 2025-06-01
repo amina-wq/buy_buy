@@ -65,7 +65,7 @@ void main() {
       build: () => favoritesBloc,
       act: (bloc) async {
         final completer = Completer<void>();
-        bloc.add(RemoveFavoriteEvent(product: productA, completer: completer));
+        bloc.add(ToggleFavoriteEvent(product: productA, completer: completer));
         await completer.future;
         await Future.delayed(const Duration(milliseconds: 10));
       },
@@ -80,12 +80,12 @@ void main() {
       build: () => favoritesBloc,
       act: (bloc) async {
         final c1 = Completer<void>();
-        bloc.add(RemoveFavoriteEvent(product: productB, completer: c1));
+        bloc.add(ToggleFavoriteEvent(product: productB, completer: c1));
         await c1.future;
         await Future.delayed(const Duration(milliseconds: 10));
 
         final c2 = Completer<void>();
-        bloc.add(RemoveFavoriteEvent(product: productB, completer: c2));
+        bloc.add(ToggleFavoriteEvent(product: productB, completer: c2));
         await c2.future;
         await Future.delayed(const Duration(milliseconds: 10));
       },

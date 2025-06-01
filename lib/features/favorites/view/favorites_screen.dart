@@ -85,7 +85,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         categoryBloc.state is CategoryLoaded ? (categoryBloc.state as CategoryLoaded).selectedCategory : allCategory;
 
     final completer = Completer();
-    favoritesBloc.add(RemoveFavoriteEvent(product: product, completer: completer));
+    favoritesBloc.add(ToggleFavoriteEvent(product: product, completer: completer));
     await completer.future;
 
     productBloc.add(ProductLoadEvent(categoryId: selectedCategory.id));
