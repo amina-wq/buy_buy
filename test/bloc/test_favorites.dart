@@ -61,7 +61,7 @@ void main() {
     );
 
     blocTest<FavoritesBloc, FavoritesState>(
-      'toggleFavorite via RemoveFavoriteEvent adds a product to favorites and reloads',
+      'ToggleFavorite via ToggleFavoriteEvent adds a product to favorites and reloads',
       build: () => favoritesBloc,
       act: (bloc) async {
         final completer = Completer<void>();
