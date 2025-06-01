@@ -50,7 +50,7 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.room_outlined, color: theme.hintColor, size: 16),
-                    Text("Zihutanejo, Gro", style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+                    Text("Bukit Jalil", style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
                     Icon(Icons.keyboard_arrow_down, size: 16),
                   ],
                 ),
