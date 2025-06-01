@@ -241,7 +241,6 @@ class _ExplorerScreenState extends State<ExplorerScreen> {
     final Category currentCategory = categoryBloc.getSelectedCategory();
     final ProductFilter? currentFilter = productBloc.getCurrentFilter();
 
-    categoryBloc.add(CategoryLoadEvent(selectedCategory: currentCategory));
     productBloc.add(ProductLoadEvent(categoryId: currentCategory.id, filter: currentFilter));
   }
 
